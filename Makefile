@@ -4,8 +4,8 @@ GENERATOR ?= Ninja
 BUILD_TYPE ?= Debug
 BUILD_DIR ?= build
 
-export CC = $(CC_COMPILER)
-export CXX = $(CXX_COMPILER)
+export CC = $(C_COMPILER)
+export CXX = $(CPP_COMPILER)
 
 .PHONY: configure
 configure:
