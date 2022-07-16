@@ -1,0 +1,74 @@
+types:
+  list(T):
+    - T
+    - [T]
+
+  map(K, V): { $K: V }
+
+  if(T):
+    - _: !embed T
+    - - - if: string
+          then: T
+        - _: !embed T
+
+  inheritance(T):
+    - T
+    - public: !optional T
+      private: !optional T
+      interface: !optional T
+
+  expression: string # @tags: !cmake
+
+  options:
+    $string:
+      description: string
+      default: expression
+      definition: !optional string
+
+  variables:
+    $string: list(expression)
+
+  settings:
+    options: !optional if(options)
+    variables: !optional if(variables)
+
+  project_type: !variant
+    - executable
+    - library
+    - interface
+
+  project:
+    _settings: !embed settings
+    type: if(project_type)
+    sources: !optional if(list(string))
+    includes: !optional if(inheritance(list(string)))
+    pchs: !optional if(inheritance(list(string)))
+    dependencies: !optional if(inheritance(list(string)))
+    definitions: !optional if(inheritance(map(string, expression)))
+    properties: !optional if(inheritance(map(string, expression)))
+    compile_options: !optional if(inheritance(list(string)))
+
+  template:
+    path: string
+    remote: !optional
+      - string
+      - git: string
+        branch: !optional string
+        patches: !optional list(string)
+    overrides: !optional if(map(string, expression))
+    project: !optional project
+
+root:
+  name: string
+  includes: !optional list(string)
+  _settings: !embed settings
+  templates: !optional
+    $string: !recursive-optional template
+  targets:
+    $string:
+      if: !optional string
+      templates: !optional
+        - list(string)
+        - list: list(string)
+          attributes: !optional { $string: scalar }
+      _target: !embed template

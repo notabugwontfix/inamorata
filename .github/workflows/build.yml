@@ -1,0 +1,47 @@
+name: Build
+on:
+  pull_request:
+  push:
+    branches: [master, develop]
+  workflow_dispatch:
+jobs:
+  build:
+    strategy:
+      matrix:
+        job:
+          - os: ubuntu-latest
+            compiler: { c: gcc, cpp: g++ }
+            generator: Unix Makefiles
+          - os: ubuntu-latest
+            compiler: { c: clang, cpp: clang++ }
+            generator: Unix Makefiles
+          - os: macos-latest
+            compiler: { c: clang, cpp: clang++ }
+            generator: Unix Makefiles
+          - os: windows-latest
+            compiler: { c: clang, cpp: clang++ }
+            generator: Ninja
+    name: ${{ matrix.job.os }} ${{ matrix.job.compiler.cpp }} ${{ matrix.job.generator }}
+    runs-on: ${{ matrix.job.os }}
+    env:
+      C_COMPILER: ${{ matrix.job.compiler.c }}
+      CPP_COMPILER: ${{ matrix.job.compiler.cpp }}
+      GENERATOR: ${{ matrix.job.generator }}
+      BUILD_TYPE: Release
+      VERBOSE: 1
+    steps:
+      - name: Checkout repository and submodules
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - if: matrix.job.os == 'ubuntu-latest'
+        name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libglew-dev
+      - name: Configure
+        run: make configure
+      - name: Build
+        run: make build
+      - name: Test
+        run: make test

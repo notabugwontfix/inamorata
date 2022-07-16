@@ -1,0 +1,73 @@
+name: inamorata
+
+options:
+  BUILD_TESTS:
+    description: Build tests
+    default: !cmake ${MAIN_PROJECT}
+
+set:
+  MAIN_PROJECT: !cmake CMAKE_CURRENT_SOURCE_DIR STREQUAL ${CMAKE_SOURCE_DIR}
+  CLANG: !cmake CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID "AppleClang"
+  GCC: !cmake CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
+  MSVC: !cmake CMAKE_CXX_COMPILER_ID STREQUAL "MSVC"
+
+templates:
+  toolchain:
+    project:
+      properties:
+        CXX_STANDARD: 20
+        CXX_STANDARD_REQUIRED: true
+      compile_options:
+        - if: ${CLANG} OR ${GNU}
+          then: >-
+            -Wall
+            -Wextra
+            -Werror
+            -Wpedantic
+            -pedantic-errors
+            -pedantic
+        - if: ${MSVC}
+          then: /W4 /WX /utf-8
+
+  inamorata:
+    path: .
+    project:
+      sources: src
+      includes: include
+      dependencies:
+        - yaml-cpp
+
+targets:
+  doctest:
+    path: libs/doctest
+    remote: https://github.com/doctest/doctest
+    overrides:
+      DOCTEST_NO_INSTALL: ON
+
+  yaml-cpp:
+    path: libs/yaml-cpp
+    remote: https://github.com/jbeder/yaml-cpp
+    overrides:
+      YAML_BUILD_SHARED_LIBS: OFF
+      YAML_CPP_BUILD_CONTRIB: OFF
+      YAML_CPP_BUILD_TOOLS: OFF
+      YAML_CPP_FORMAT_SOURCE: OFF
+
+  inamorata:
+    templates:
+      - toolchain
+      - inamorata
+    project:
+      type: library
+      dependencies:
+        - doctest
+
+  inamorata_test:
+    if: ${BUILC_TESTS}
+    templates:
+      - toolchain
+      - inamorata
+    project:
+      type: executable
+      dependencies:
+        - doctest_with_main
