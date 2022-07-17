@@ -11,7 +11,10 @@ add_subdirectory(libs)
 
 # Sources
 set(SOURCES
-    src/test.cpp
+    include/${PROJECT_NAME}/inamorata.h
+
+    include/${PROJECT_NAME}/validation.h
+    src/validation.cpp
 )
 
 # Tests
