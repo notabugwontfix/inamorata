@@ -10,22 +10,22 @@ jobs:
       matrix:
         job:
           - os: ubuntu-latest
-            compiler: { c: gcc, cpp: g++ }
+            compiler: { c: gcc, cxx: g++ }
             generator: Unix Makefiles
           - os: ubuntu-latest
-            compiler: { c: clang, cpp: clang++ }
+            compiler: { c: clang, cxx: clang++ }
             generator: Unix Makefiles
           - os: macos-latest
-            compiler: { c: clang, cpp: clang++ }
+            compiler: { c: clang, cxx: clang++ }
             generator: Unix Makefiles
           - os: windows-latest
-            compiler: { c: clang, cpp: clang++ }
+            compiler: { c: clang, cxx: clang++ }
             generator: Ninja
     name: ${{ matrix.job.os }} ${{ matrix.job.compiler.cpp }} ${{ matrix.job.generator }}
     runs-on: ${{ matrix.job.os }}
     env:
       C_COMPILER: ${{ matrix.job.compiler.c }}
-      CPP_COMPILER: ${{ matrix.job.compiler.cpp }}
+      CXX_COMPILER: ${{ matrix.job.compiler.cxx }}
       GENERATOR: ${{ matrix.job.generator }}
       BUILD_TYPE: Release
       VERBOSE: 1

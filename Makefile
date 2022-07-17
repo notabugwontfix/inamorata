@@ -1,11 +1,11 @@
 C_COMPILER ?= clang
-CPP_COMPILER ?= clang++
+CXX_COMPILER ?= clang++
 GENERATOR ?= Ninja
 BUILD_TYPE ?= Debug
 BUILD_DIR ?= build
 
 export CC = $(C_COMPILER)
-export CXX = $(CPP_COMPILER)
+export CXX = $(CXX_COMPILER)
 
 .PHONY: configure
 configure:
