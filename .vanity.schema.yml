@@ -49,6 +49,7 @@ types:
     compile_options: !optional if(inheritance(list(string)))
 
   template:
+    if: !optional string
     path: string
     remote: !optional
       - string
@@ -66,7 +67,6 @@ root:
     $string: !recursive-optional template
   targets:
     $string:
-      if: !optional string
       templates: !optional
         - list(string)
         - list: list(string)
