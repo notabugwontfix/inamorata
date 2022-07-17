@@ -11,10 +11,8 @@ add_subdirectory(libs)
 
 # Sources
 set(SOURCES
-    include/${PROJECT_NAME}/inamorata.h
-
-    include/${PROJECT_NAME}/validation.h
-    src/validation.cpp
+    include/${PROJECT_NAME}/validator.h
+    src/validator.cpp
 )
 
 # Tests
@@ -47,8 +45,6 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE yaml-cpp
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC include)
-
 # Compile options
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR
     CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR
@@ -73,6 +69,8 @@ set(TARGET_PROPERTIES
 )
 
 foreach(TARGET ${TARGETS})
+    target_include_directories(${TARGET} PUBLIC include)
+
     target_compile_options(${TARGET} PRIVATE ${TARGET_COMPILE_OPTIONS})
     set_target_properties(${TARGET} PROPERTIES ${TARGET_PROPERTIES})
 endforeach()
