@@ -13,6 +13,9 @@ add_subdirectory(libs)
 set(SOURCES
     include/${PROJECT_NAME}/validator.h
     src/validator.cpp
+
+    src/schema.h
+    src/schema.cpp
 )
 
 # Tests
