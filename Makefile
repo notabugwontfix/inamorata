@@ -9,24 +9,24 @@ export CXX = $(CXX_COMPILER)
 
 .PHONY: configure
 configure:
-	cmake -S . -B $(BUILD_DIR) -G "$(GENERATOR)" \
+	cmake -S . -B "$(BUILD_DIR)" -G "$(GENERATOR)" \
 		-D CMAKE_BUILD_TYPE="$(BUILD_TYPE)" \
 		-D CMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 .PHONY: build
 build: configure
-	cmake --build $(BUILD_DIR) --config "$(BUILD_TYPE)" --parallel
+	cmake --build "$(BUILD_DIR)" --config "$(BUILD_TYPE)" --parallel
 
 .PHONY: clean
-clean:
-	rm -rf $(BUILD_DIR)
+clean: reset-submodules
+	rm -rf "$(BUILD_DIR)"
 
 .PHONY: test
 test: BUILD_TESTS = ON
 test: build
-	ctest --output-on-failure --test-dir $(BUILD_DIR) -C "$(BUILD_TYPE)"
+	ctest --output-on-failure --test-dir "$(BUILD_DIR)" -C "$(BUILD_TYPE)"
 
-.PHONY: submodules
+.PHONY: fetch-submodules
 submodules:
 	git submodule update --init --recursive --jobs=4
 	git pull --recurse-submodules --jobs=4

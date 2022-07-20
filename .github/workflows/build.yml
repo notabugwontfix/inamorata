@@ -21,7 +21,10 @@ jobs:
           - os: windows-latest
             compiler: { c: clang, cxx: clang++ }
             generator: Ninja
-    name: ${{ matrix.job.os }} ${{ matrix.job.compiler.cpp }} ${{ matrix.job.generator }}
+          - os: windows-latest
+            compiler: { c: cl, cxx: cl }
+            generator: Visual Studio 17 2022
+    name: ${{ matrix.job.os }} ${{ matrix.job.compiler.cxx }} ${{ matrix.job.generator }}
     runs-on: ${{ matrix.job.os }}
     env:
       C_COMPILER: ${{ matrix.job.compiler.c }}
