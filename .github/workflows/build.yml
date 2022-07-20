@@ -18,12 +18,12 @@ jobs:
           - os: macos-latest
             compiler: { c: clang, cxx: clang++ }
             generator: Unix Makefiles
-          - os: windows-latest
-            compiler: { c: clang, cxx: clang++ }
-            generator: Ninja
-          - os: windows-latest
-            compiler: { c: cl, cxx: cl }
-            generator: Visual Studio 17 2022
+          # - os: windows-latest
+          #   compiler: { c: clang, cxx: clang++ }
+          #   generator: Ninja
+          # - os: windows-latest
+          #   compiler: { c: cl, cxx: cl }
+          #   generator: Visual Studio 17 2022
     name: ${{ matrix.job.os }} ${{ matrix.job.compiler.cxx }} ${{ matrix.job.generator }}
     runs-on: ${{ matrix.job.os }}
     env:
